@@ -5,6 +5,8 @@ FROM python:3.8
 WORKDIR /Flask
 
 RUN pip3 install flask
+RUN RUN apt-get update
+Run apt-get install nano -y
 
 COPY . .
 
