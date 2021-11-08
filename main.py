@@ -14,7 +14,7 @@ def main():
     randnum = str(randint(0, 1000))
     if not os.path.exists(archivePath):
         os.mkdir(archivePath)
-    f = open(archivePath+'/'+outputFile, 'w+')
+    f = open(archivePath+'/'+outputFile, 'a')
     f.write(randnum+'\n')
     f.close()
     return randnum
