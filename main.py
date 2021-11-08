@@ -15,5 +15,5 @@ def author():
     return 'Artur Liszewski'
 
 if __name__ == '__main__':
-    print(version)
+    print('### Version: '+version+'###')
     app.run(debug=True, host='0.0.0.0')
