@@ -1,13 +1,23 @@
+import os
+
 from flask import Flask
 from random import randint
 
 app = Flask(__name__)
 
 version = '1.2'
+archivePath = '/Flask/archive'
+outputFile = 'output.txt'
 
 @app.route('/get-item',endpoint='get-item' ,methods=['GET'])
 def main():
-    return str(randint(0, 1000))
+    randnum = str(randint(0, 1000))
+    if not os.path.exists(archivePath):
+        os.mkdir(archivePath)
+    f = open(archivePath+'/'+outputFile, 'w+')
+    f.write(randnum+'\n')
+    f.close()
+    return randnum
 
 
 @app.route('/author', endpoint='author', methods=['GET'])
