@@ -14,9 +14,10 @@ def main():
     randnum = str(randint(0, 1000))
     if not os.path.exists(archivePath):
         print('no volume attached')
-    f = open(archivePath+'/'+outputFile, 'a')
-    f.write(randnum+'\n')
-    f.close()
+    else:
+        f = open(archivePath+'/'+outputFile, 'a')
+        f.write(randnum+'\n')
+        f.close()
     return randnum
 
 
