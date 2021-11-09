@@ -6,7 +6,7 @@ from random import randint
 app = Flask(__name__)
 
 version = '1.4'
-archivePath = '/Flask/archive'
+archivePath = '/archive'
 outputFile = 'output.txt'
 
 @app.route('/get-item',endpoint='get-item' ,methods=['GET'])
