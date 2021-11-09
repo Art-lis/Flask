@@ -13,7 +13,7 @@ outputFile = 'output.txt'
 def main():
     randnum = str(randint(0, 1000))
     if not os.path.exists(archivePath):
-        os.mkdir(archivePath)
+        print('no volume attached')
     f = open(archivePath+'/'+outputFile, 'a')
     f.write(randnum+'\n')
     f.close()
