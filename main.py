@@ -23,7 +23,10 @@ def main():
 
 @app.route('/author', endpoint='author', methods=['GET'])
 def author():
-    return 'Artur Liszewski'
+    zmienna = 'Artur Liszewski\n'
+    nodeName = os.environ.get('MY_POD_NAME\n')
+    output = str(zmienna)+str(nodeName)
+    return output
 
 if __name__ == '__main__':
     print('### Version: '+version+' ###')
