@@ -5,7 +5,7 @@ from random import randint
 
 app = Flask(__name__)
 
-version = '1.6'
+version = '1.7'
 archivePath = '/archive'
 outputFile = 'output.txt'
 
@@ -23,10 +23,10 @@ def main():
 
 @app.route('/author', endpoint='author', methods=['GET'])
 def author():
-    author = 'Artur Liszewski\n'
+    author = 'Artur Liszewski<br>'
     podName = os.environ.get('MY_POD_NAME')
     nodeName = os.environ.get('MY_NODE_NAME')
-    output = str(author)+'\n'+str(nodeName)+'\n'+str(podName)
+    output = str(author)+'<br>'+str(nodeName)+'<br>'+str(podName)
     return output
 
 if __name__ == '__main__':
