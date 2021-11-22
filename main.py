@@ -24,9 +24,9 @@ def main():
 @app.route('/author', endpoint='author', methods=['GET'])
 def author():
     author = 'Artur Liszewski\n'
-    podName = os.environ.get('MY_POD_NAME\n')
-    nodeName = os.environ.get('MY_NODE_NAME\n')
-    output = str(author)+str(nodeName)+str(podName)
+    podName = os.environ.get('MY_POD_NAME')
+    nodeName = os.environ.get('MY_NODE_NAME')
+    output = str(author)+'\n'+str(nodeName)+'\n'+str(podName)
     return output
 
 if __name__ == '__main__':
