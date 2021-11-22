@@ -5,7 +5,7 @@ from random import randint
 
 app = Flask(__name__)
 
-version = '1.7'
+version = '1.8'
 archivePath = '/archive'
 outputFile = 'output.txt'
 
