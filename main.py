@@ -1,11 +1,13 @@
+import datetime
 import os
 
 from flask import Flask
 from random import randint
+from google.cloud import storage
 
 app = Flask(__name__)
 
-version = '1.9'
+version = '2.0'
 archivePath = '/archive'
 outputFile = 'output.txt'
 
@@ -14,6 +16,7 @@ def main():
     envVar = os.environ.get('NUMBER_TYPE')
     choice = False
 
+    #sprawdzenie czy parzysta / nieparzysta / dowolna
     while choice == False:
         randnum = randint(0, 1000)
         if envVar == 'even':
@@ -25,7 +28,7 @@ def main():
         else:
             choice = True
 
-
+    #zapis na pod
     randstr = str(randnum)
     if not os.path.exists(archivePath):
         print('no volume attached')
@@ -33,6 +36,11 @@ def main():
         f = open(archivePath+'/'+outputFile, 'a')
         f.write(randstr+'\n')
         f.close()
+
+    #upload do bucketa
+    date = str(datetime.datetime.now()).replace(' ', '_')
+    bucketName = os.environ.get('BUCKET_NAME')
+    upload_blob(bucketName, archivePath+'/'+outputFile, date)
 
     return randstr
 
@@ -60,3 +68,26 @@ def author():
 if __name__ == '__main__':
     print('### Version: '+version+' ###')
     app.run(debug=True, host='0.0.0.0')
+
+
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    """Uploads a file to the bucket."""
+    # The ID of your GCS bucket
+    # bucket_name = "your-bucket-name"
+    # The path to your file to upload
+    # source_file_name = "local/path/to/file"
+    # The ID of your GCS object
+    # destination_blob_name = "storage-object-name"
+
+    storage_client = storage.Client.from_service_account_json(
+        'service-account-file.json')
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_filename(source_file_name)
+
+    print(
+        "File {} uploaded to {}.".format(
+            source_file_name, destination_blob_name
+        )
+    )
