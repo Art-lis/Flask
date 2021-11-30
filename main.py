@@ -7,7 +7,7 @@ from google.cloud import storage
 
 app = Flask(__name__)
 
-version = '2.6'
+version = '2.0'
 archivePath = '/archive'
 outputFile = 'output.txt'
 
@@ -40,9 +40,7 @@ def main():
     #upload do bucketa
     date = str(datetime.datetime.now()).replace(' ', '_')
     bucketName = os.environ.get('BUCKET_NAME')
-    #upload_blob(bucketName, randstr, date)
-    storage_client = storage.Client.from_service_account_json(
-        'service-account-file.json')
+    storage_client = storage.Client.from_service_account_json('service-account-file.json')
     bucket = storage_client.bucket(bucketName)
     blob = bucket.blob(date+'.txt')
     blob.upload_from_string(randstr)
@@ -73,26 +71,3 @@ def author():
 if __name__ == '__main__':
     print('### Version: '+version+' ###')
     app.run(debug=True, host='0.0.0.0')
-
-
-#def upload_blob(bucket_name, data, destination_blob_name):
-#    """Uploads a file to the bucket."""
-    # The ID of your GCS bucket
-    # bucket_name = "your-bucket-name"
-    # The path to your file to upload
-    # source_file_name = "local/path/to/file"
-    # The ID of your GCS object
-    # destination_blob_name = "storage-object-name"
-
-#    storage_client = storage.Client.from_service_account_json(
-#        'service-account-file.json')
-#    bucket = storage_client.bucket(bucket_name)
-#    blob = bucket.blob(destination_blob_name)
-
-#    blob.upload_from_string(data)
-
-#    print(
-#        "File {} uploaded to {}.".format(
-#            data, destination_blob_name
-#        )
-#    )
