@@ -38,9 +38,10 @@ def main():
         f.close()
 
     #upload do bucketa
-    date = str(datetime.datetime.now()).replace(' ', '_')
-    bucketName = os.environ.get('BUCKET_NAME')
-    upload_blob(bucketName, archivePath+'/'+outputFile, date)
+    if os.path.exists(archivePath+'/'+outputFile):
+        date = str(datetime.datetime.now()).replace(' ', '_')
+        bucketName = os.environ.get('BUCKET_NAME')
+        upload_blob(bucketName, archivePath+'/'+outputFile, date)
 
     return randstr
 
