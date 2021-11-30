@@ -7,7 +7,7 @@ from google.cloud import storage
 
 app = Flask(__name__)
 
-version = '2.3'
+version = '2.4'
 archivePath = '/archive'
 outputFile = 'output.txt'
 
@@ -38,10 +38,9 @@ def main():
         f.close()
 
     #upload do bucketa
-    if os.path.exists(archivePath+'/'+outputFile):
-        date = str(datetime.datetime.now()).replace(' ', '_')
-        bucketName = os.environ.get('BUCKET_NAME')
-        upload_blob(bucketName, archivePath+'/'+outputFile, date)
+    date = str(datetime.datetime.now()).replace(' ', '_')
+    bucketName = os.environ.get('BUCKET_NAME')
+    upload_blob(bucketName, randstr, date)
 
     return randstr
 
@@ -71,7 +70,7 @@ if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
 
 
-def upload_blob(bucket_name, source_file_name, destination_blob_name):
+def upload_blob(bucket_name, data, destination_blob_name):
     """Uploads a file to the bucket."""
     # The ID of your GCS bucket
     # bucket_name = "your-bucket-name"
@@ -85,10 +84,10 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
 
-    blob.upload_from_filename(source_file_name)
+    blob.upload_from_string(data)
 
     print(
         "File {} uploaded to {}.".format(
-            source_file_name, destination_blob_name
+            data, destination_blob_name
         )
     )
