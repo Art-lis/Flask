@@ -6,7 +6,8 @@ WORKDIR /Flask
 
 RUN pip3 install flask
 RUN apt-get update
-Run apt-get install nano -y
+RUN apt-get install nano -y
+RUN pip3 install google-cloud-storage
 
 COPY . .
 
