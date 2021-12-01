@@ -7,7 +7,7 @@ from google.cloud import storage
 
 app = Flask(__name__)
 
-version = '2.0'
+version = '2.1'
 archivePath = '/archive'
 outputFile = 'output.txt'
 
@@ -40,9 +40,9 @@ def main():
     #upload do bucketa
     date = str(datetime.datetime.now()).replace(' ', '_')
     bucketName = os.environ.get('BUCKET_NAME')
-    storage_client = storage.Client.from_service_account_json('service-account-file.json')
+    storage_client = storage.Client
     bucket = storage_client.bucket(bucketName)
-    blob = bucket.blob(date+'.txt')
+    blob = bucket.blob(date)
     blob.upload_from_string(randstr)
 
     return randstr
