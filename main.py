@@ -41,7 +41,7 @@ def main():
     date = str(datetime.datetime.now()).replace(' ', '_')
     bucketName = os.environ.get('BUCKET_NAME')
     storage_client = storage.Client()
-    bucket = storage_client.bucket(bucketName)
+    bucket = storage_client.bucket(str(bucketName))
     blob = bucket.blob(date)
     blob.upload_from_string(randstr)
 
@@ -65,7 +65,8 @@ def author():
     author = 'Artur Liszewski<br>'
     podName = os.environ.get('MY_POD_NAME')
     nodeName = os.environ.get('MY_NODE_NAME')
-    output = str(author)+'<br>'+str(nodeName)+'<br>'+str(podName)
+    bucketName = os.environ.get('BUCKET_NAME')
+    output = str(author)+'<br>'+str(nodeName)+'<br>'+str(podName)+'<br>'+bucketName
     return output
 
 if __name__ == '__main__':
