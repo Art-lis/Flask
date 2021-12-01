@@ -41,7 +41,7 @@ def main():
     date = str(datetime.datetime.now()).replace(' ', '_')
     bucketName = os.environ.get('BUCKET_NAME')
     storage_client = storage.Client()
-    bucket = storage_client.bucket(str(bucketName))
+    bucket = storage_client.bucket(bucketName)
     blob = bucket.blob(date)
     blob.upload_from_string(randstr)
 
