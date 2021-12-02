@@ -7,9 +7,13 @@ from google.cloud import storage
 
 app = Flask(__name__)
 
-version = '2.2'
+version = '2.3'
 archivePath = '/archive'
 outputFile = 'output.txt'
+
+@app.route('/', methods=['GET'])
+def start():
+    return 'aplikacja flaska tylko że rapowa'
 
 @app.route('/get-item',endpoint='get-item' ,methods=['GET'])
 def main():
