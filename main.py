@@ -67,8 +67,8 @@ def isOdd(num):
 @app.route('/author', endpoint='author', methods=['GET'])
 def author():
     author = 'Artur Liszewski<br>'
-    podName = os.environ.get('MY_POD_NAME')
-    nodeName = os.environ.get('MY_NODE_NAME')
+    podName = os.environ.get('MY_POD_NAME') or ''
+    nodeName = os.environ.get('MY_NODE_NAME') or ''
     bucketName = os.environ.get('BUCKET_NAME')
     output = str(author)+'<br>'+str(nodeName)+'<br>'+str(podName)+'<br>'+bucketName
     return output
