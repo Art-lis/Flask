@@ -80,7 +80,7 @@ def author():
 
 @app.route('/error', methods=['GET'])
 def error():
-return 'Error'
+    return 1
 
 
 if __name__ == '__main__':
