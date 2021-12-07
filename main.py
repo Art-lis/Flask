@@ -7,20 +7,22 @@ from google.cloud import storage
 
 app = Flask(__name__)
 
-version = '2.4'
+version = '2.05'
 archivePath = '/archive'
 outputFile = 'output.txt'
+
 
 @app.route('/', methods=['GET'])
 def start():
     return 'aplikacja flaska tylko że rapowa'
 
-@app.route('/get-item',endpoint='get-item' ,methods=['GET'])
+
+@app.route('/get-item', endpoint='get-item', methods=['GET'])
 def main():
     envVar = os.environ.get('NUMBER_TYPE')
     choice = False
 
-    #sprawdzenie czy parzysta / nieparzysta / dowolna
+    # sprawdzenie czy parzysta / nieparzysta / dowolna
     while choice == False:
         randnum = randint(0, 1000)
         if envVar == 'even':
@@ -32,16 +34,16 @@ def main():
         else:
             choice = True
 
-    #zapis na pod
+    # zapis na pod
     randstr = str(randnum)
     if not os.path.exists(archivePath):
         print('no volume attached')
     else:
-        f = open(archivePath+'/'+outputFile, 'a')
-        f.write(randstr+'\n')
+        f = open(archivePath + '/' + outputFile, 'a')
+        f.write(randstr + '\n')
         f.close()
 
-    #upload do bucketa
+    # upload do bucketa
     date = str(datetime.datetime.now()).replace(' ', '_')
     bucketName = os.environ.get('BUCKET_NAME')
     storage_client = storage.Client()
@@ -51,11 +53,13 @@ def main():
 
     return randstr
 
+
 def isEven(num):
     if num % 2 == 0:
         return True
     else:
         return False
+
 
 def isOdd(num):
     if num % 2 != 0:
@@ -70,9 +74,15 @@ def author():
     podName = os.environ.get('MY_POD_NAME') or ''
     nodeName = os.environ.get('MY_NODE_NAME') or ''
     bucketName = os.environ.get('BUCKET_NAME')
-    output = str(author)+'<br>'+str(nodeName)+'<br>'+str(podName)+'<br>'+bucketName
+    output = str(author) + '<br>' + str(nodeName) + '<br>' + str(podName) + '<br>' + bucketName
     return output
 
+
+@app.route('/error', methods=['GET'])
+def error():
+return 'Error'
+
+
 if __name__ == '__main__':
-    print('### Version: '+version+' ###')
+    print('### Version: ' + version + ' ###')
     app.run(debug=True, host='0.0.0.0')
