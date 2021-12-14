@@ -77,6 +77,11 @@ def author():
     output = str(author) + '<br>' + str(nodeName) + '<br>' + str(podName) + '<br>' + bucketName
     return output
 
+@app.route('/prime', methods=['GET'])
+def prime():
+    liczba = os.system('curl https://us-central1-artur-liszewski.cloudfunctions.net/function-1')
+    return liczba
+
 
 @app.route('/error', methods=['GET'])
 def error():
