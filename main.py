@@ -80,8 +80,8 @@ def author():
 
 @app.route('/prime', methods=['GET'])
 def prime():
-    return requests.get('https://us-central1-artur-liszewski.cloudfunctions.net/function-1').text
-
+    liczba = requests.get('https://us-central1-artur-liszewski.cloudfunctions.net/function-1').text
+    return str(liczba)
 
 @app.route('/error', methods=['GET'])
 def error():
