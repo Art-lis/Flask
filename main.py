@@ -1,6 +1,7 @@
 import datetime
 import os
 
+import requests
 from flask import Flask
 from random import randint
 from google.cloud import storage
@@ -79,8 +80,7 @@ def author():
 
 @app.route('/prime', methods=['GET'])
 def prime():
-    liczba = os.system('curl https://us-central1-artur-liszewski.cloudfunctions.net/function-1')
-    return str(liczba)
+    return requests.get('https://us-central1-artur-liszewski.cloudfunctions.net/function-1').text
 
 
 @app.route('/error', methods=['GET'])
