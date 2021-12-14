@@ -8,7 +8,7 @@ from google.cloud import storage
 
 app = Flask(__name__)
 
-version = '2.5'
+version = '2.6'
 archivePath = '/archive'
 outputFile = 'output.txt'
 
