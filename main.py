@@ -9,7 +9,7 @@ from google.cloud import bigquery
 
 app = Flask(__name__)
 
-version = '2.6'
+version = '2.8'
 archivePath = '/archive'
 outputFile = 'output.txt'
 
@@ -55,10 +55,11 @@ def main():
 
     # upload do BigQuery
     client = bigquery.Client()
-    table_id = "artur-liszewski:python_flask.python_flask_table"
+    table_id = 'artur-liszewski:python_flask.python_flask_table'
+
 
     rows_to_insert = [
-        {u"execution_time": u"test", u"number": randstr, u"timestamp": date, u"deployment": u"deploy"},
+        {u"execution_time": u"test", u"number": f"{randstr}", u"timestamp": f"{date}", u"deployment": u"deploy"},
     ]
 
     errors = client.insert_rows_json(table_id, rows_to_insert)  # Make an API request.
