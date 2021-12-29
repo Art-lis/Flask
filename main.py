@@ -59,8 +59,7 @@ def main():
 
 
     rows_to_insert = [
-        {u"execution_time": 'test', u"number": 'test', u"timestamp": 'test', u"deployment": 'test'},
-        {u"execution_time": 'test2', u"number": 'test2', u"timestamp": 'test2', u"deployment": 'test2'},
+        {u"execution_time": 'test', u"number": randstr, u"timestamp": date, u"deployment": 'test'},
     ]
 
     errors = client.insert_rows_json(table_id, rows_to_insert)  # Make an API request.
