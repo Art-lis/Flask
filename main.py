@@ -55,7 +55,7 @@ def main():
 
     # upload do BigQuery
     client = bigquery.Client()
-    table_id = "artur-liszewski.python_flask.python_flask_table"
+    table_id = "artur-liszewski:python_flask.python_flask_table"
 
     rows_to_insert = [
         {u"execution_time": u"test", u"number": randstr, u"timestamp": date, u"deployment": u"deploy"},
