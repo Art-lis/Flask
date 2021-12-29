@@ -5,6 +5,7 @@ import requests
 from flask import Flask
 from random import randint
 from google.cloud import storage
+from google.cloud import bigquery
 
 app = Flask(__name__)
 
@@ -51,6 +52,20 @@ def main():
     bucket = storage_client.bucket(bucketName)
     blob = bucket.blob(date)
     blob.upload_from_string(randstr)
+
+    # upload do BigQuery
+    client = bigquery.Client()
+    table_id = "artur-liszewski.python_flask.python_flask_table"
+
+    rows_to_insert = [
+        {u"execution_time": u"test", u"number": randstr, u"timestamp": date, u"deployment": u"deploy"},
+    ]
+
+    errors = client.insert_rows_json(table_id, rows_to_insert)  # Make an API request.
+    if errors == []:
+        print("New rows have been added.")
+    else:
+        print("Encountered errors while inserting rows: {}".format(errors))
 
     return randstr
 
