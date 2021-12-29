@@ -55,18 +55,17 @@ def main():
 
     # upload do BigQuery
     client = bigquery.Client()
-    table_id = 'artur-liszewski:python_flask.python_flask_table'
+    table_id = 'artur-liszewski.python_flask.python_flask_table'
 
 
     rows_to_insert = [
-        {u"execution_time": u"test", u"number": f"{randstr}", u"timestamp": f"{date}", u"deployment": u"deploy"},
+        {u"execution_time": 'test', u"number": 'test', u"timestamp": 'test', u"deployment": 'test'},
+        {u"execution_time": 'test2', u"number": 'test2', u"timestamp": 'test2', u"deployment": 'test2'},
     ]
 
     errors = client.insert_rows_json(table_id, rows_to_insert)  # Make an API request.
     if errors == []:
         print("New rows have been added.")
-    else:
-        print("Encountered errors while inserting rows: {}".format(errors))
 
     return randstr
 
