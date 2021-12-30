@@ -59,8 +59,8 @@ def main():
     blob.upload_from_string(randstr)
 
     # upload do BigQuery
-    #client = bigquery.Client.from_service_account_json('serv-acc.json', project='artur-liszewski')
-    client = bigquery.Client()
+    client = bigquery.Client.from_service_account_json('serv-acc.json', project='artur-liszewski')
+    #client = bigquery.Client()
     table_id = 'python_flask.python_flask_table'
 
 
