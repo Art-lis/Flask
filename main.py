@@ -56,9 +56,9 @@ def main():
     # upload do BigQuery
     client = bigquery.Client.from_service_account_json('serv-acc.json', project='artur-liszewski')
     table_id = 'python_flask.python_flask_table'
-
+    deployment = os.environ.get('DEPLOYMENT')
     rows_to_insert = [
-        {u"execution_time": 'test', u"number": randstr, u"timestamp": date, u"deployment": os.environ.get('DEPLOYMENT')},
+        {u"execution_time": 'test', u"number": randstr, u"timestamp": date, u"deployment": f'{deployment}'},
     ]
 
     errors = client.insert_rows_json(table_id, rows_to_insert)  # Make an API request.
