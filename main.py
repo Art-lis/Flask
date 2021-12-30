@@ -1,8 +1,9 @@
 import datetime
 import os
+import time
 
 import requests
-from flask import Flask
+from flask import Flask, g
 from random import randint
 from google.cloud import storage
 from google.cloud import bigquery
@@ -13,6 +14,10 @@ version = '2.8'
 archivePath = '/archive'
 outputFile = 'output.txt'
 
+@app.before_request
+def before_request():
+   g.request_start_time = time.time()
+   g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
 
 @app.route('/', methods=['GET'])
 def start():
@@ -54,12 +59,13 @@ def main():
     blob.upload_from_string(randstr)
 
     # upload do BigQuery
-    client = bigquery.Client.from_service_account_json('serv-acc.json', project='artur-liszewski')
+    #client = bigquery.Client.from_service_account_json('serv-acc.json', project='artur-liszewski')
+    client = bigquery.Client()
     table_id = 'python_flask.python_flask_table'
 
 
     rows_to_insert = [
-        {u"execution_time": 'test', u"number": randstr, u"timestamp": date, u"deployment": 'test'},
+        {u"execution_time": str(g.request_time()), u"number": randstr, u"timestamp": date, u"deployment": os.environ.get('DEPLOYMENT')},
     ]
 
     errors = client.insert_rows_json(table_id, rows_to_insert)  # Make an API request.
