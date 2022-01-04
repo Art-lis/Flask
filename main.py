@@ -8,10 +8,11 @@ from flask import Flask
 from random import randint
 from google.cloud import storage
 from google.cloud import bigquery
+from google.cloud import pubsub_v1
 
 app = Flask(__name__)
 
-version = '2.8'
+version = '2.9'
 archivePath = '/archive'
 outputFile = 'output.txt'
 deployment = os.environ.get('DEPLOYMENT')
@@ -55,7 +56,11 @@ def main():
         {u"execution_time": 'test', u"number": randstr, u"timestamp": date, u"deployment": f'{deployment}'},
     ]
 
-    write_to_BigQuerry(rows_to_insert)
+    row_to_insert = {u"execution_time": 'test', u"number": randstr, u"timestamp": date, u"deployment": f'{deployment}'}
+
+    #write_to_BigQuerry(rows_to_insert)
+
+    push_to_pubsub(row_to_insert)
 
 
     return randstr
@@ -91,22 +96,15 @@ def write_to_BigQuerry(data):
     if errors == []:
         print("New rows have been added.")
 
-def publish(client, topic_path, data_lines):
-    messages = []
-    for line in data_lines:
-        messages.append({'data': line})
-    body = {'messages': messages}
-    str_body = json.dumps(body)
-    data = base64.urlsafe_b64encode(bytearray(str_body, 'utf8'))
-    client.publish(topic_path, data=data)
+def push_to_pubsub(data):
+    project_id = 'artur-liszewski'
+    topic_id = 'nowy-topic'
+    publisher = pubsub_v1.PublisherClient()
+    topic_path = publisher.topic_path(project_id, topic_id)
+    data = json.dumps(data)
+    data = data.encode('utf-8')
+    publisher.publish(topic_path, data)
 
-def collect(data):
-    data_to_send = []
-    stream = base64.urlsafe_b64decode(data)
-    twraw = json.loads(stream)
-    twmessages = twraw.get('messages')
-    for message in twmessages:
-        data_to_send.append(message['data'])
 
 
 @app.route('/author', endpoint='author', methods=['GET'])
