@@ -1,4 +1,6 @@
+import base64
 import datetime
+import json
 import os
 
 import requests
@@ -12,6 +14,7 @@ app = Flask(__name__)
 version = '2.8'
 archivePath = '/archive'
 outputFile = 'output.txt'
+deployment = os.environ.get('DEPLOYMENT')
 
 
 @app.route('/', methods=['GET'])
@@ -23,6 +26,7 @@ def start():
 def main():
     envVar = os.environ.get('NUMBER_TYPE')
     choice = False
+    date = str(datetime.datetime.now()).replace(' ', '_')
 
     # sprawdzenie czy parzysta / nieparzysta / dowolna
     while choice == False:
@@ -45,25 +49,14 @@ def main():
         f.write(randstr + '\n')
         f.close()
 
-    # upload do bucketa
-    date = str(datetime.datetime.now()).replace(' ', '_')
-    bucketName = os.environ.get('BUCKET_NAME')
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucketName)
-    blob = bucket.blob(date)
-    blob.upload_from_string(randstr)
+    upload_to_bucket(randstr)
 
-    # upload do BigQuery
-    client = bigquery.Client.from_service_account_json('serv-acc.json', project='artur-liszewski')
-    table_id = 'python_flask.python_flask_table'
-    deployment = os.environ.get('DEPLOYMENT')
     rows_to_insert = [
         {u"execution_time": 'test', u"number": randstr, u"timestamp": date, u"deployment": f'{deployment}'},
     ]
 
-    errors = client.insert_rows_json(table_id, rows_to_insert)  # Make an API request.
-    if errors == []:
-        print("New rows have been added.")
+    write_to_BigQuerry(rows_to_insert)
+
 
     return randstr
 
@@ -80,6 +73,40 @@ def isOdd(num):
         return True
     else:
         return False
+
+# upload do bucketa
+def upload_to_bucket(randstr):
+    date = str(datetime.datetime.now()).replace(' ', '_')
+    bucketName = os.environ.get('BUCKET_NAME')
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucketName)
+    blob = bucket.blob(date)
+    blob.upload_from_string(randstr)
+
+# upload do BigQuery
+def write_to_BigQuerry(data):
+    client = bigquery.Client.from_service_account_json('serv-acc.json', project='artur-liszewski')
+    table_id = 'python_flask.python_flask_table'
+    errors = client.insert_rows_json(table_id, data)  # Make an API request.
+    if errors == []:
+        print("New rows have been added.")
+
+def publish(client, topic_path, data_lines):
+    messages = []
+    for line in data_lines:
+        messages.append({'data': line})
+    body = {'messages': messages}
+    str_body = json.dumps(body)
+    data = base64.urlsafe_b64encode(bytearray(str_body, 'utf8'))
+    client.publish(topic_path, data=data)
+
+def collect(data):
+    data_to_send = []
+    stream = base64.urlsafe_b64decode(data)
+    twraw = json.loads(stream)
+    twmessages = twraw.get('messages')
+    for message in twmessages:
+        data_to_send.append(message['data'])
 
 
 @app.route('/author', endpoint='author', methods=['GET'])

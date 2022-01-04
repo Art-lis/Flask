@@ -9,6 +9,7 @@ RUN apt-get update
 RUN apt-get install nano -y
 RUN pip3 install google-cloud-storage
 RUN pip3 install google-cloud-bigquery
+RUN pip3 install google-cloud-pubsub
 
 COPY . .
 
