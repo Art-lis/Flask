@@ -59,7 +59,7 @@ def main():
 
     row_to_insert = {u"execution_time": 'test', u"number": randstr, u"timestamp": date, u"deployment": f'{deployment}'}
 
-    if bigquerry_table_id is not 'false':
+    if bigquerry_table_id != 'false':
         write_to_BigQuerry(rows_to_insert, bigquerry_table_id)
 
     #push_to_pubsub(row_to_insert)
