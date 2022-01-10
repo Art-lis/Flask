@@ -16,6 +16,7 @@ version = '2.9'
 archivePath = '/archive'
 outputFile = 'output.txt'
 deployment = os.environ.get('DEPLOYMENT')
+bigquerry_table_id = os.environ.get('BIGQUERRY_TABLE_ID')
 
 
 @app.route('/', methods=['GET'])
@@ -58,9 +59,10 @@ def main():
 
     row_to_insert = {u"execution_time": 'test', u"number": randstr, u"timestamp": date, u"deployment": f'{deployment}'}
 
-    #write_to_BigQuerry(rows_to_insert)
+    if bigquerry_table_id is not 'false':
+        write_to_BigQuerry(rows_to_insert)
 
-    push_to_pubsub(row_to_insert)
+    #push_to_pubsub(row_to_insert)
 
 
     return randstr
@@ -89,9 +91,8 @@ def upload_to_bucket(randstr):
     blob.upload_from_string(randstr)
 
 # upload do BigQuery
-def write_to_BigQuerry(data):
+def write_to_BigQuerry(data, table_id):
     client = bigquery.Client.from_service_account_json('serv-acc.json', project='artur-liszewski')
-    table_id = 'python_flask.python_flask_table'
     errors = client.insert_rows_json(table_id, data)  # Make an API request.
     if errors == []:
         print("New rows have been added.")
